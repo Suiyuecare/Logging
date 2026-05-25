@@ -1,0 +1,16 @@
+{
+  "name": "@suiyuecare/logging",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Suiyuecare platform audit logging schema and server-side helper.",
+  "exports": {
+    ".": "./src/auditLogger.js"
+  },
+  "peerDependencies": {
+    "@supabase/supabase-js": "^2.0.0"
+  },
+  "scripts": {
+    "check": "node --check src/auditLogger.js && node --check examples/server-usage.js"
+  }
+}
