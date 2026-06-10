@@ -135,6 +135,27 @@ create table if not exists public.platform_profiles (
   updated_at timestamptz not null default now()
 );
 
+create table if not exists public.platform_departments (
+  id text primary key,
+  company_id text not null references public.platform_companies (id),
+  name text not null,
+  status text not null default 'active' check (status in ('active', 'disabled')),
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  unique (company_id, name)
+);
+
+create table if not exists public.platform_business_units (
+  id text primary key,
+  company_id text not null references public.platform_companies (id),
+  department_id text references public.platform_departments (id),
+  name text not null,
+  status text not null default 'active' check (status in ('active', 'disabled')),
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  unique (company_id, department_id, name)
+);
+
 create table if not exists public.platform_roles (
   id uuid primary key default gen_random_uuid(),
   company_id text references public.platform_companies (id),
@@ -221,23 +242,47 @@ create table if not exists public.hr_employees (
   unique (company_id, employee_no)
 );
 
+create table if not exists public.hr_employee_assignments (
+  id uuid primary key default gen_random_uuid(),
+  employee_id uuid not null references public.hr_employees (id) on delete cascade,
+  company_id text not null references public.platform_companies (id),
+  position_id uuid references public.platform_positions (id),
+  department_id text references public.platform_departments (id),
+  business_unit_id text references public.platform_business_units (id),
+  job_grade text not null,
+  job_title text not null,
+  regions text[] not null default '{}',
+  source_row_no integer,
+  is_primary boolean not null default false,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  unique (employee_id, source_row_no)
+);
+
 create index if not exists platform_profiles_company_idx on public.platform_profiles (company_id);
 create index if not exists platform_profiles_account_status_idx on public.platform_profiles (account_status);
+create index if not exists platform_departments_company_idx on public.platform_departments (company_id);
+create index if not exists platform_business_units_company_department_idx on public.platform_business_units (company_id, department_id);
 create index if not exists platform_user_roles_role_idx on public.platform_user_roles (role_id);
 create index if not exists platform_role_permissions_permission_idx on public.platform_role_permissions (permission_code);
 create index if not exists platform_user_data_scopes_user_idx on public.platform_user_data_scopes (user_id, scope_type);
 create index if not exists hr_employees_company_status_idx on public.hr_employees (company_id, employment_status);
+create index if not exists hr_employee_assignments_employee_idx on public.hr_employee_assignments (employee_id);
+create index if not exists hr_employee_assignments_company_idx on public.hr_employee_assignments (company_id, department_id, business_unit_id);
 
 alter table public.platform_companies enable row level security;
 alter table public.platform_modules enable row level security;
 alter table public.platform_positions enable row level security;
 alter table public.platform_profiles enable row level security;
+alter table public.platform_departments enable row level security;
+alter table public.platform_business_units enable row level security;
 alter table public.platform_roles enable row level security;
 alter table public.platform_permissions enable row level security;
 alter table public.platform_role_permissions enable row level security;
 alter table public.platform_user_roles enable row level security;
 alter table public.platform_user_data_scopes enable row level security;
 alter table public.hr_employees enable row level security;
+alter table public.hr_employee_assignments enable row level security;
 
 drop policy if exists "Public read enabled platform modules" on public.platform_modules;
 create policy "Public read enabled platform modules"
