@@ -47,7 +47,7 @@ Inactive accounts must be rejected by the caller before showing any module.
 
 ## Supabase REST API
 
-The platform package exposes a Supabase REST API client. It defaults to URL `https://ffnnqbcqmnunskjdtkly.supabase.co` and publishable key `sb_publishable_F5JLcuiExa85r4b3caJWYw_NjKOpnSY`.
+The platform package exposes a Supabase REST API client. It defaults to URL `https://tiorfiqiowylbnartegx.supabase.co` and publishable key `sb_publishable_F5JLcuiExa85r4b3caJWYw_NjKOpnSY`.
 
 ```js
 import { createSupabaseRestClient } from "@suiyuecare/logging";

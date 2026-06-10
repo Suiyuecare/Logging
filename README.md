@@ -67,7 +67,7 @@ The audit log table intentionally has no public insert policy. Write audit event
 The package includes a REST API client that defaults to the provided Supabase project URL and publishable key:
 
 ```text
-https://ffnnqbcqmnunskjdtkly.supabase.co
+https://tiorfiqiowylbnartegx.supabase.co
 sb_publishable_F5JLcuiExa85r4b3caJWYw_NjKOpnSY
 ```
 

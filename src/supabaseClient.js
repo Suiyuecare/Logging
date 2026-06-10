@@ -1,4 +1,4 @@
-export const DEFAULT_SUPABASE_URL = "https://ffnnqbcqmnunskjdtkly.supabase.co";
+export const DEFAULT_SUPABASE_URL = "https://tiorfiqiowylbnartegx.supabase.co";
 export const DEFAULT_SUPABASE_PUBLISHABLE_KEY = "sb_publishable_F5JLcuiExa85r4b3caJWYw_NjKOpnSY";
 
 function requireValue(value, label) {
