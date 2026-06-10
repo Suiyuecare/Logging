@@ -239,6 +239,25 @@ alter table public.platform_user_roles enable row level security;
 alter table public.platform_user_data_scopes enable row level security;
 alter table public.hr_employees enable row level security;
 
+drop policy if exists "Public read enabled platform modules" on public.platform_modules;
+create policy "Public read enabled platform modules"
+  on public.platform_modules
+  for select
+  using (enabled = true);
+
+drop policy if exists "Public read platform permissions" on public.platform_permissions;
+create policy "Public read platform permissions"
+  on public.platform_permissions
+  for select
+  using (
+    exists (
+      select 1
+      from public.platform_modules m
+      where m.code = platform_permissions.module_code
+        and m.enabled = true
+    )
+  );
+
 insert into public.platform_modules (code, name, description, sort_order)
 values
   ('portal', '登入入口網', '帳號登入、模組入口、個人權限與系統通知。', 10),

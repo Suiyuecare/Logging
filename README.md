@@ -68,7 +68,7 @@ The package includes a REST API client that defaults to the provided Supabase pr
 
 ```text
 https://tiorfiqiowylbnartegx.supabase.co
-sb_publishable_F5JLcuiExa85r4b3caJWYw_NjKOpnSY
+sb_publishable_COw7A6dDU1xIxGqkgYcBOw_nygD-zBe
 ```
 
 Required environment variables:

@@ -1,5 +1,5 @@
 export const DEFAULT_SUPABASE_URL = "https://tiorfiqiowylbnartegx.supabase.co";
-export const DEFAULT_SUPABASE_PUBLISHABLE_KEY = "sb_publishable_F5JLcuiExa85r4b3caJWYw_NjKOpnSY";
+export const DEFAULT_SUPABASE_PUBLISHABLE_KEY = "sb_publishable_COw7A6dDU1xIxGqkgYcBOw_nygD-zBe";
 
 function requireValue(value, label) {
   if (value === undefined || value === null || value === "") {
