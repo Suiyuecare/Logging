@@ -3,14 +3,22 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "Suiyuecare platform audit logging schema and server-side helper.",
+  "description": "Suiyuecare platform audit logging, module catalog, and permission context helpers.",
   "exports": {
-    ".": "./src/auditLogger.js"
+    ".": "./src/index.js",
+    "./audit": "./src/auditLogger.js",
+    "./github": "./src/githubClient.js",
+    "./modules": "./src/modules.js",
+    "./platform": "./src/platformContext.js",
+    "./supabase": "./src/supabaseClient.js",
+    "./vercel": "./src/vercelClient.js"
   },
   "peerDependencies": {
     "@supabase/supabase-js": "^2.0.0"
   },
   "scripts": {
-    "check": "node --check src/auditLogger.js && node --check examples/server-usage.js"
+    "check": "node --check src/auditLogger.js && node --check src/githubClient.js && node --check src/modules.js && node --check src/platformContext.js && node --check src/supabaseClient.js && node --check src/vercelClient.js && node --check src/index.js && node --check examples/server-usage.js && node --check scripts/connect-github-vercel.js && node --test",
+    "connect:vercel-github": "node scripts/connect-github-vercel.js",
+    "test": "node --test"
   }
 }

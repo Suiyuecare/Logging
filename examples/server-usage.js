@@ -1,7 +1,15 @@
 import { createClient } from "@supabase/supabase-js";
-import { createAuditLogger } from "../src/auditLogger.js";
+import {
+  createAuditLogger,
+  createPlatformAuth,
+  createSupabaseRestClient,
+  createVercelClient
+} from "../src/index.js";
 
 const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY);
+const supabaseRest = createSupabaseRestClient();
+const platformAuth = createPlatformAuth({ supabase });
+const vercel = createVercelClient();
 
 const logger = createAuditLogger({
   supabase,
@@ -12,10 +20,17 @@ const logger = createAuditLogger({
   }
 });
 
+const context = await platformAuth.getUserContext("00000000-0000-0000-0000-000000000000");
+platformAuth.requirePermission(context, "system.permissions.manage");
+const restContext = await supabaseRest.getPlatformUserContext(context.user_id);
+
+const portalProject = await vercel.getProject();
+const portalDeployments = await vercel.listDeployments({ limit: 5, target: "production" });
+
 await logger.logEvent({
   event_type: "permission_change",
   action: "manage",
-  module_code: "system_permissions",
+  module_code: "system",
   resource_type: "user_role",
   resource_id: "role_assignment_id",
   result: "success",
@@ -38,7 +53,9 @@ await logger.logEvent({
   metadata: {
     request_id: "req_example",
     ip_address: "203.0.113.1",
-    user_agent: "Mozilla/5.0"
+    user_agent: "Mozilla/5.0",
+    rest_context_loaded: Boolean(restContext?.user_id),
+    vercel_project_id: portalProject.id,
+    vercel_deployment_count: portalDeployments.deployments?.length || 0
   }
 });
-
